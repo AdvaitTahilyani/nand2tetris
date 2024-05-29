@@ -15,7 +15,7 @@ output-list RAM[0]%D2.6.2 RAM[1]%D2.6.2 RAM[2]%D2.6.2;
 set RAM[0] 0,   // Sets R0 and R1 to some input values
 set RAM[1] 0,
 set RAM[2] -1;  // Ensures that the program initialized R2 to 0
-repeat 20 {
+repeat 1000 {
   ticktock;
 }
 set RAM[0] 0,   // Restores R0 and R1 in case the program changed them
