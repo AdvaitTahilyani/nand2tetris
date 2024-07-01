@@ -6,6 +6,10 @@
 // Performs a simple calculation and returns the result.
 // argument[0] and argument[1] must be set by the caller.
 
+function Sys.init 0
+		call SimpleFunction.test 2
+label END  
+	goto END  // loops infinitely
 function SimpleFunction.test 2
 	push local 0
 	push local 1
