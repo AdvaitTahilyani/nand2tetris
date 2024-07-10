@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 enum Token
 {
@@ -38,10 +39,10 @@ enum Keyword
     THIS,
 };
 
-class Parser
+class Tokenizer
 {
 public:
-    Parser(std::string filename);
+    Tokenizer(std::string filename);
     bool hasMoreTokens();
     void advance();
     Token tokenType();
@@ -53,7 +54,9 @@ public:
 
 private:
     std::vector<std::string> contents;
-    std::string trim(std::string str, char comp);
+    std::map<std::string, Keyword> keywords;
+    void trim(std::string &str, std::string comp);
+    void processComments(std::string &str);
     unsigned int index = -1;
     unsigned int line_index = 0;
 };
