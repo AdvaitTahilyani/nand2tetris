@@ -86,9 +86,10 @@ Token Tokenizer::tokenType()
         if (!(isalnum(contents[index][i]) || contents[index][i] == '_'))
         {
             word_length = i - line_index;
-            return Token::IDENTIFIER;
+            break;
         }
     }
+    return Token::IDENTIFIER;
 }
 
 Keyword Tokenizer::keyWord()
@@ -129,8 +130,8 @@ std::string Tokenizer::trim(std::string str, std::string comp)
 }
 void Tokenizer::processComments(std::string &str)
 {
-    unsigned int comInd = str.find("//");
-    unsigned int comEnd = str.find("*/");
+    size_t comInd = str.find("//");
+    size_t comEnd = str.find("*/");
     if (comInd != std::string::npos)
     {
         str.erase(comInd, str.length() - comInd);
