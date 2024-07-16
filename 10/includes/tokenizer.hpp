@@ -53,10 +53,12 @@ public:
     std::string stringVal();
 
 private:
+    std::vector<char> symbols;
     std::vector<std::string> contents;
     std::map<std::string, Keyword> keywords;
+    bool symbolCheck(char c);
     bool stringCheck(std::string str);
-    void trim(std::string &str, std::string comp);
+    std::string trim(std::string str, std::string comp);
     void processComments(std::string &str);
     unsigned int index = 0;
     unsigned int line_index = -1;

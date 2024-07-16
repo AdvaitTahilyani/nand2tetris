@@ -22,8 +22,8 @@ Tokenizer::Tokenizer(std::string filename)
     while (std::getline(ifs, line))
     {
         processComments(line);
-        trim(line, " ");
-        trim(line, "\t");
+        line = trim(line, " ");
+        line = trim(line, "\t");
         if (line == "" || line[0] == '\n')
         {
             continue;
@@ -48,7 +48,7 @@ void Tokenizer::advance()
     {
         line_index = line_index + word_length;
         word_length = 1;
-        if (contents[index][line_index] == ' ' || contents[index][line_index] == '"')
+        if (contents[index][line_index] == ' ')
         {
             advance();
         }
@@ -70,7 +70,7 @@ Token Tokenizer::tokenType()
     }
     if (contents[index][line_index] == '"')
     {
-        word_length = contents[index].substr(line_index + 1).find('"');
+        word_length = contents[index].substr(line_index + 1).find('"') + 1;
         return Token::STRING_CONST;
     }
     if (stringCheck(contents[index].substr(line_index)))
@@ -91,7 +91,31 @@ Token Tokenizer::tokenType()
     }
 }
 
-void Tokenizer::trim(std::string &str, std::string comp)
+Keyword Tokenizer::keyWord()
+{
+    return keywords[contents[index].substr(line_index, word_length)];
+}
+
+char Tokenizer::symbol()
+{
+    return contents[index][line_index];
+}
+
+std::string Tokenizer::identifier()
+{
+    return contents[index].substr(line_index, word_length);
+}
+
+int Tokenizer::intVal()
+{
+    return stoi(contents[index].substr(line_index, word_length));
+}
+
+std::string Tokenizer::stringVal()
+{
+    return trim(contents[index].substr(line_index, word_length), "\"");
+}
+std::string Tokenizer::trim(std::string str, std::string comp)
 {
     while (str.find(comp) == 0)
     {
@@ -101,8 +125,8 @@ void Tokenizer::trim(std::string &str, std::string comp)
     {
         str.erase(str.length() - 1, 1);
     }
+    return str;
 }
-
 void Tokenizer::processComments(std::string &str)
 {
     unsigned int comInd = str.find("//");
