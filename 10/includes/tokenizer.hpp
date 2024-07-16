@@ -55,10 +55,12 @@ public:
 private:
     std::vector<std::string> contents;
     std::map<std::string, Keyword> keywords;
+    bool stringCheck(std::string str);
     void trim(std::string &str, std::string comp);
     void processComments(std::string &str);
-    unsigned int index = -1;
-    unsigned int line_index = 0;
+    unsigned int index = 0;
+    unsigned int line_index = -1;
+    unsigned int word_length = 1;
 };
 
 #endif

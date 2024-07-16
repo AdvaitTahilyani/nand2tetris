@@ -1,11 +1,18 @@
 #include "tokenizer.hpp"
+#include <vector>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <stdexcept>
+#include <cctype>
 
 Tokenizer::Tokenizer(std::string filename)
 {
+    keywords = {
+        {"class", CLASS}, {"constructor", CONSTRUCTOR}, {"function", FUNCTION}, {"method", METHOD}, {"field", FIELD}, {"static", STATIC}, {"var", VAR}, {"int", INT}, {"char", CHAR}, {"boolean", BOOLEAN}, {"void", VOID}, {"true", TRUE}, {"false", FALSE}, {"null", KEY_NULL}, {"this", THIS}, {"let", LET}, {"do", DO}, {"if", IF}, {"else", ELSE}, {"while", WHILE}, {"return", RETURN}};
+    symbols = {
+        '{', '}', '(', ')', '[', ']', '.', ',', ';', '+', '-', '*', '/',
+        '&', '|', '<', '>', '=', '~'};
     std::ifstream ifs{filename};
     if (!ifs.is_open())
     {
@@ -22,6 +29,65 @@ Tokenizer::Tokenizer(std::string filename)
             continue;
         }
         contents.push_back(line);
+    }
+}
+
+bool Tokenizer::hasMoreTokens()
+{
+    return !(index == contents.size() - 1 && word_length == contents[index].size() - 1);
+}
+
+void Tokenizer::advance()
+{
+    if (line_index + word_length == contents[index].size() - 1)
+    {
+        line_index = 0;
+        index++;
+    }
+    else
+    {
+        line_index = line_index + word_length;
+        word_length = 1;
+        if (contents[index][line_index] == ' ' || contents[index][line_index] == '"')
+        {
+            advance();
+        }
+    }
+}
+
+Token Tokenizer::tokenType()
+{
+    if (isdigit(contents[index][line_index]))
+    {
+        for (unsigned int i = line_index; i < contents[index].size(); i++)
+        {
+            if (!isdigit(contents[index][i]))
+            {
+                word_length = i - line_index;
+                return Token::INT_CONST;
+            }
+        }
+    }
+    if (contents[index][line_index] == '"')
+    {
+        word_length = contents[index].substr(line_index + 1).find('"');
+        return Token::STRING_CONST;
+    }
+    if (stringCheck(contents[index].substr(line_index)))
+    {
+        return Token::KEYWORD;
+    }
+    if (symbolCheck(contents[index][line_index]))
+    {
+        return Token::SYMBOL;
+    }
+    for (unsigned int i = line_index; i < contents[index].size(); i++)
+    {
+        if (!(isalnum(contents[index][i]) || contents[index][i] == '_'))
+        {
+            word_length = i - line_index;
+            return Token::IDENTIFIER;
+        }
     }
 }
 
@@ -54,4 +120,30 @@ void Tokenizer::processComments(std::string &str)
         }
         str.erase(comInd, (comEnd - comInd) + 2);
     }
+}
+
+bool Tokenizer::stringCheck(std::string str)
+{
+    for (auto const &[key, value] : keywords)
+    {
+        if (str.find(key) == 0)
+        {
+            word_length = key.length();
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Tokenizer::symbolCheck(char c)
+{
+    for (char a : symbols)
+    {
+        if (c == a)
+        {
+            word_length = 1;
+            return true;
+        }
+    }
+    return false;
 }
