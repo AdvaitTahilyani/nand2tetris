@@ -23,6 +23,10 @@ In Project 3 of the Nand2Tetris course, I expanded my focus to include memory co
 - **Functionality**: Provides read and write access to a series of memory locations.
 - **Components Used**: Each RAM chip is recursively built from smaller RAM units (e.g., RAM8 built from 8 Registers, RAM64 from 8 RAM8 units, etc.), incorporating decoders to direct read/write operations to the correct memory location.
 
+### How to Run the Implementation
+
+To run and test the implementations of these logical chips use the hardware simulator at https://nand2tetris.github.io/web-ide/chip/
+
 ## Conclusion
 
 The third project not only reinforced my understanding of sequential logic but also allowed me to explore the hierarchical construction of memory systems in digital computers. From single bits to comprehensive memory arrays, these implementations demonstrate the layered approach to building complex memory architectures in modern computing.

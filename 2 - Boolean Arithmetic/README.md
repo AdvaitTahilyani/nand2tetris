@@ -21,6 +21,10 @@ In the second project of the Nand2Tetris course, I leveraged the basic logical g
 ### Arithmetic Logic Unit (ALU)
 - **Functionality**: A fundamental computing unit capable of performing various arithmetic and logical operations.
 - **Components Used**: Built upon all the previous chips, including logic gates from Project 1 and adders from Project 2. Capable of operations like addition, subtraction, negation, and bitwise operations such as AND, OR, and NOT.
+  
+### How to Run the Implementation
+
+To run and test the implementations of these logical chips use the hardware simulator at https://nand2tetris.github.io/web-ide/chip/
 
 ## Conclusion
 
