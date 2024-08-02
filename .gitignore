@@ -1,2 +1,4 @@
 .DS_Store
-7/bin/
+bin/
+.vscode/
+
