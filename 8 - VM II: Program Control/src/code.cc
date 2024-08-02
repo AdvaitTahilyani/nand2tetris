@@ -1,13 +1,18 @@
-#include "VM 1: Stack Arithmetic/includes/code.hpp"
+#include "8 - VM II: Program Control/includes/code.hpp"
+#include <iostream>
 
-Code::Code(std::ofstream file, std::string filename)
+Code::Code(std::ofstream file)
 {
-    name = filename;
     ofs = std::move(file);
     writeLine("@256");
     writeLine("D=A");
     writeLine("@SP");
     writeLine("M=D");
+    writeCall("Sys.init", 0);
+}
+void Code::setFileName(std::string filename)
+{
+    name = filename;
 }
 void Code::writeArithmetic(std::string command)
 {
@@ -170,21 +175,116 @@ void Code::writePushPop(Command command, std::string segment, int index)
             writeLine("A=D");
             writeLine("D=M");
         }
-        writeLine("@SP");
-        writeLine("A=M");
-        writeLine("M=D");
-        writeLine("@SP");
-        writeLine("M=M+1");
+        push();
     }
+}
+void Code::writeLabel(std::string label)
+{
+    // Add Function mapping
+    writeLine("(" + function + "$" + label + ")");
+}
+void Code::writeGoto(std::string label)
+{
+    writeLine("@" + function + "$" + label);
+    writeLine("0;JMP");
+}
+void Code::writeIf(std::string label)
+{
+    writePushPop(Command::C_POP, "R", 14);
+    writeLine("@R14");
+    writeLine("D=M");
+    writeLine("@" + function + "$" + label);
+    writeLine("D;JNE");
+}
+void Code::writeFunction(std::string functionName, int nVars)
+{
+    retcount = 0;
+    function = functionName;
+    writeLine("(" + function + ")");
+    for (int i = 0; i < nVars; i++)
+    {
+        writePushPop(Command::C_PUSH, "constant", 0);
+    }
+}
+void Code::writeCall(std::string functionName, int nArgs)
+{
+    writeLine("@" + function + "$ret." + std::to_string(retcount));
+    writeLine("D=A");
+    push();
+    writeLine("@LCL");
+    writeLine("D=M");
+    push();
+    writeLine("@ARG");
+    writeLine("D=M");
+    push();
+    writeLine("@THIS");
+    writeLine("D=M");
+    push();
+    writeLine("@THAT");
+    writeLine("D=M");
+    push();
+    writeLine("@SP");
+    writeLine("D=M");
+    writeLine("@" + std::to_string(5 + nArgs));
+    writeLine("D=D-A");
+    writeLine("@ARG");
+    writeLine("M=D");
+    writeLine("@SP");
+    writeLine("D=M");
+    writeLine("@LCL");
+    writeLine("M=D");
+    writeLine("@" + functionName);
+    writeLine("0;JMP");
+    writeLine("(" + function + "$ret." + std::to_string(retcount) + ")");
+    retcount++;
+}
+void Code::writeReturn()
+{
+    writeLine("@LCL");
+    writeLine("D=M");
+    writeLine("@R14");
+    writeLine("M=D");
+    restore("R15", 5);
+    writePushPop(Command::C_POP, "argument", 0);
+    writeLine("@ARG");
+    writeLine("D=M+1");
+    writeLine("@SP");
+    writeLine("M=D");
+    restore("THAT", 1);
+    restore("THIS", 2);
+    restore("ARG", 3);
+    restore("LCL", 4);
+    writeLine("@R15");
+    writeLine("A=M");
+    writeLine("0;JMP");
 }
 void Code::close()
 {
-    writeLine("(END)");
-    writeLine("@END");
-    writeLine("0;JMP");
+    // writeLine("(END)");
+    // writeLine("@END");
+    // writeLine("0;JMP");
     ofs.close();
 }
 void Code::writeLine(std::string line)
 {
     ofs << line << std::endl;
+}
+void Code::push()
+{
+    writeLine("@SP");
+    writeLine("A=M");
+    writeLine("M=D");
+    writeLine("@SP");
+    writeLine("M=M+1");
+}
+void Code::restore(std::string var, int num)
+{
+    writeLine("@R14");
+    writeLine("D=M");
+    writeLine("@" + std::to_string(num));
+    writeLine("D=D-A");
+    writeLine("A=D");
+    writeLine("D=M");
+    writeLine("@" + var);
+    writeLine("M=D");
 }
