@@ -1,6 +1,6 @@
-#include "parser.hpp"
-#include "helpers.hpp"
-#include "symbol_table.hpp"
+#include "Assembler/includes/parser.hpp"
+#include "Assembler/includes/helpers.hpp"
+#include "Assembler/includes/symbol_table.hpp"
 #include <iostream>
 #include <fstream>
 #include <string>
