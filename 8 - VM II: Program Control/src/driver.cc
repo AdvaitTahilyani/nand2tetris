@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     Code codewriter = Code(std::move(ofs));
     for (const auto &entry : fs::directory_iterator(path))
     {
-        if (entry.is_regular_file() && entry.path().extension() == ".vm")
+        if (entry.is_regular_file() && entry.path().extension() == ".vm" && (fs::is_directory(filename) || entry.path() == inputPath))
         {
             std::string name = entry.path().stem();
             codewriter.setFileName(name);
