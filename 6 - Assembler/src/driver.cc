@@ -1,6 +1,6 @@
-#include "6 - Assembler/includes/parser.hpp"
-#include "6 - Assembler/includes/code.hpp"
-#include "6 - Assembler/includes/helpers.hpp"
+#include "parser.hpp"
+#include "code.hpp"
+#include "helpers.hpp"
 #include <iostream>
 #include <string>
 #include <fstream>

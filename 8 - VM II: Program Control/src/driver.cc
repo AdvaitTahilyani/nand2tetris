@@ -1,5 +1,5 @@
-#include "8 - VM II: Program Control/includes/parser.hpp"
-#include "8 - VM II: Program Control/includes/code.hpp"
+#include "parser.hpp"
+#include "code.hpp"
 #include <fstream>
 #include <iostream>
 #include <stdexcept>

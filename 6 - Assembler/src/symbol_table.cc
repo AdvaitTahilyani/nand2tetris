@@ -1,4 +1,4 @@
-#include "6 - Assembler/includes/symbol_table.hpp"
+#include "symbol_table.hpp"
 
 SymbolTable::SymbolTable()
 {

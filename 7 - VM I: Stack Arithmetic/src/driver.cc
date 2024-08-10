@@ -1,5 +1,5 @@
-#include "7 - VM I: Stack Arithmetic/includes/parser.hpp"
-#include "7 - VM I: Stack Arithmetic/includes/code.hpp"
+#include "parser.hpp"
+#include "code.hpp"
 #include <fstream>
 #include <iostream>
 #include <stdexcept>

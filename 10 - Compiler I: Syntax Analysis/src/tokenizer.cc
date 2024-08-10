@@ -1,4 +1,4 @@
-#include "10 - Compiler I: Syntax Analysis/includes/tokenizer.hpp"
+#include "tokenizer.hpp"
 #include <vector>
 #include <iostream>
 #include <fstream>
