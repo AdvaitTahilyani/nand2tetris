@@ -1,4 +1,5 @@
 #include "tokenizer.hpp"
+#include "helpers.hpp"
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
@@ -22,21 +23,16 @@ int main(int argc, char *argv[])
     {
         newFilePath = inputPath / (inputPath.filename().string() + ".xml");
         path = filename;
-    }
-    else
-    {
-        path = inputPath.parent_path();
-        newFilePath = inputPath.parent_path() / (inputPath.stem().string() + ".xml");
         for (const auto &entry : fs::directory_iterator(path))
         {
             if (entry.is_regular_file() && entry.path().extension() == ".jack")
             {
+                Helper::processFile(entry.path());
             }
         }
     }
-    std::ofstream ofs{newFilePath};
-    if (!ofs.is_open())
+    else
     {
-        std::runtime_error("Could not create file");
+        Helper::processFile(path);
     }
 }
