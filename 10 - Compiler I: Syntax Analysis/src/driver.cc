@@ -33,6 +33,6 @@ int main(int argc, char *argv[])
     }
     else
     {
-        Helper::processFile(path);
+        Helper::processFile(inputPath);
     }
 }

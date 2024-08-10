@@ -13,6 +13,7 @@ Tokenizer::Tokenizer(std::string filename)
     symbols = {
         '{', '}', '(', ')', '[', ']', '.', ',', ';', '+', '-', '*', '/',
         '&', '|', '<', '>', '=', '~'};
+    symbolsMap = {{'<', "&lt"}, {'>', "&gt"}, {'"', "&quot"}, {'&', "&amp"}};
     std::ifstream ifs{filename};
     if (!ifs.is_open())
     {
@@ -34,12 +35,12 @@ Tokenizer::Tokenizer(std::string filename)
 
 bool Tokenizer::hasMoreTokens()
 {
-    return !(index == contents.size() - 1 && word_length == contents[index].size() - 1);
+    return !(index == contents.size() - 1 && line_index == contents[index].size() - 1);
 }
 
 void Tokenizer::advance()
 {
-    if (line_index + word_length == contents[index].size() - 1)
+    if (line_index + word_length >= contents[index].size())
     {
         line_index = 0;
         index++;
@@ -57,6 +58,7 @@ void Tokenizer::advance()
 
 Token Tokenizer::tokenType()
 {
+    std::cout << "test:" << contents[index] << " " << line_index << std::endl;
     if (isdigit(contents[index][line_index]))
     {
         for (unsigned int i = line_index; i < contents[index].size(); i++)
@@ -97,9 +99,14 @@ Keyword Tokenizer::keyWord()
     return keywords[contents[index].substr(line_index, word_length)];
 }
 
-char Tokenizer::symbol()
+std::string Tokenizer::symbol()
 {
-    return contents[index][line_index];
+    char c = contents[index][line_index];
+    if (symbolsMap.find(c) != symbolsMap.end())
+    {
+        return symbolsMap[c];
+    }
+    return std::string(1, c);
 }
 
 std::string Tokenizer::identifier()
@@ -118,23 +125,31 @@ std::string Tokenizer::stringVal()
 }
 std::string Tokenizer::trim(std::string str, std::string comp)
 {
+    if (str == "")
+    {
+        return str;
+    }
     while (str.find(comp) == 0)
     {
         str.erase(0, 1);
     }
-    while (str.rfind(comp) == str.length() - 1)
+    while (str.rfind(comp) == str.length() - 1 && str != "")
     {
-        str.erase(str.length() - 1, 1);
+        str.erase(str.length() - 1);
     }
     return str;
 }
 void Tokenizer::processComments(std::string &str)
 {
+    if (str == "")
+    {
+        return;
+    }
     size_t comInd = str.find("//");
     size_t comEnd = str.find("*/");
     if (comInd != std::string::npos)
     {
-        str.erase(comInd, str.length() - comInd);
+        str.erase(comInd);
     }
     comInd = str.find("/*");
     while (comInd != std::string::npos)
@@ -144,6 +159,8 @@ void Tokenizer::processComments(std::string &str)
             std::invalid_argument("Missing end of comment");
         }
         str.erase(comInd, (comEnd - comInd) + 2);
+        comInd = str.find("/*");
+        comEnd = str.find("*/");
     }
 }
 

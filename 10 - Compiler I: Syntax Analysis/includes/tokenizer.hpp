@@ -47,7 +47,7 @@ public:
     void advance();
     Token tokenType();
     Keyword keyWord();
-    char symbol();
+    std::string symbol();
     std::string identifier();
     int intVal();
     std::string stringVal();
@@ -56,6 +56,7 @@ private:
     std::vector<char> symbols;
     std::vector<std::string> contents;
     std::map<std::string, Keyword> keywords;
+    std::map<char, std::string> symbolsMap;
     bool symbolCheck(char c);
     bool stringCheck(std::string str);
     std::string trim(std::string str, std::string comp);
