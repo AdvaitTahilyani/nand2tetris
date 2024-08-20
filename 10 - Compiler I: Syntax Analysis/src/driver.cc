@@ -1,4 +1,5 @@
 #include "tokenizer.hpp"
+#include "compiler.hpp"
 #include "helpers.hpp"
 #include <fstream>
 #include <iostream>
@@ -17,17 +18,17 @@ int main(int argc, char *argv[])
     }
     std::string filename = std::string(argv[1]);
     fs::path inputPath(filename);
-    std::string path;
     fs::path newFilePath;
+    Compiler compilationEngine;
     if (fs::is_directory(filename))
     {
         newFilePath = inputPath / (inputPath.filename().string() + ".xml");
-        path = filename;
-        for (const auto &entry : fs::directory_iterator(path))
+        for (const auto &entry : fs::directory_iterator(filename))
         {
             if (entry.is_regular_file() && entry.path().extension() == ".jack")
             {
-                Helper::processFile(entry.path());
+                fs::path newFilePath = inputPath.parent_path() / (inputPath.stem().string() + ".xml");
+                compilationEngine = Compiler(entry.path(), newFilePath);
             }
         }
     }

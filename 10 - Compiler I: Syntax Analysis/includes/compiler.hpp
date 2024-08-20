@@ -2,12 +2,16 @@
 #define COMPILER_HPP
 
 #include "tokenizer.hpp"
+#include <filesystem>
 #include <fstream>
+
+namespace fs = std::filesystem;
 
 class Compiler
 {
 public:
-    Compiler(std::string filename, std::ofstream ofs);
+    Compiler() = default;
+    Compiler(std::string filename, std::string output);
     void compileClass();
     void compileClassVarDec();
     void compileSubroutine();

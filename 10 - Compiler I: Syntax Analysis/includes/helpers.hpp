@@ -11,8 +11,6 @@ class Helper
 {
 public:
     static void processFile(fs::path inputPath);
-
-private:
     static std::string openTag(std::string name);
     static std::string closeTag(std::string name);
 };

@@ -1,4 +1,25 @@
-#include "Compiler.hpp"
+#include "compiler.hpp"
+#include "tokenizer.hpp"
+#include <fstream>
+#include <stdexcept>
+
+Compiler::Compiler(std::string filename, std::string output)
+{
+    tokenizer = Tokenizer(filename);
+    std::ofstream ofs{output};
+    if (!ofs.is_open())
+    {
+        std::runtime_error("Could not create file");
+    }
+}
+
+void Compiler::compileClass()
+{
+    if (tokenizer.tokenType() != KEYWORD || tokenizer.keyWord() != CLASS)
+    {
+        std::runtime_error("File should start with a class");
+    }
+}
 
 void Compiler::compileClassVarDec()
 {

@@ -42,6 +42,7 @@ enum Keyword
 class Tokenizer
 {
 public:
+    Tokenizer() = default;
     Tokenizer(std::string filename);
     bool hasMoreTokens();
     void advance();
