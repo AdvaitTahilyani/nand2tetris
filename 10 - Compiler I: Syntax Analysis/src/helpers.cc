@@ -10,7 +10,7 @@ void Helper::processFile(fs::path inputPath)
     std::ofstream ofs{newFilePath};
     if (!ofs.is_open())
     {
-        std::runtime_error("Could not create file");
+        throw std::runtime_error("Could not create file");
     }
     Tokenizer tokenizer = Tokenizer(inputPath.string());
     ofs << "<tokens>" << std::endl;
@@ -28,7 +28,7 @@ void Helper::processFile(fs::path inputPath)
         }
         else if (token == Token::KEYWORD)
         {
-            ofs << openTag("keyword") << keywordMap[tokenizer.keyWord()] << closeTag("keyword") << std::endl;
+            ofs << openTag("keyword") << tokenizer.keyWord() << closeTag("keyword") << std::endl;
         }
         else if (token == Token::STRING_CONST)
         {

@@ -29,6 +29,10 @@ public:
     int compileExpressionList();
 
 private:
+    void compileKeyword();
+    void compileIdentifier();
+    void compileSymbol();
+    void compileType();
     Tokenizer tokenizer;
     std::ofstream ofs;
 };

@@ -8,8 +8,7 @@
 
 Tokenizer::Tokenizer(std::string filename)
 {
-    keywords = {
-        {"class", CLASS}, {"constructor", CONSTRUCTOR}, {"function", FUNCTION}, {"method", METHOD}, {"field", FIELD}, {"static", STATIC}, {"var", VAR}, {"int", INT}, {"char", CHAR}, {"boolean", BOOLEAN}, {"void", VOID}, {"true", TRUE}, {"false", FALSE}, {"null", KEY_NULL}, {"this", THIS}, {"let", LET}, {"do", DO}, {"if", IF}, {"else", ELSE}, {"while", WHILE}, {"return", RETURN}};
+    keywords = {"class", "constructor", "function", "method", "field", "static", "var", "int", "char", "boolean", "void", "true", "false", "null", "this", "let", "do", "if", "else", "while", "return"};
     symbols = {
         '{', '}', '(', ')', '[', ']', '.', ',', ';', '+', '-', '*', '/',
         '&', '|', '<', '>', '=', '~'};
@@ -93,9 +92,9 @@ Token Tokenizer::tokenType()
     return Token::IDENTIFIER;
 }
 
-Keyword Tokenizer::keyWord()
+std::string Tokenizer::keyWord()
 {
-    return keywords[contents[index].substr(line_index, word_length)];
+    return contents[index].substr(line_index, word_length);
 }
 
 std::string Tokenizer::symbol()
@@ -165,11 +164,11 @@ void Tokenizer::processComments(std::string &str)
 
 bool Tokenizer::stringCheck(std::string str)
 {
-    for (auto const &[key, value] : keywords)
+    for (auto const &val : keywords)
     {
-        if (str.find(key) == 0)
+        if (str.find(val) == 0)
         {
-            word_length = key.length();
+            word_length = val.length();
             return true;
         }
     }
@@ -187,4 +186,9 @@ bool Tokenizer::symbolCheck(char c)
         }
     }
     return false;
+}
+
+void Tokenizer::error(std::string text)
+{
+    throw std::runtime_error(text + "on line" + std::to_string(index) + "..." + contents[index]);
 }

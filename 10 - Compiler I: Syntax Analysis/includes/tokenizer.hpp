@@ -47,16 +47,17 @@ public:
     bool hasMoreTokens();
     void advance();
     Token tokenType();
-    Keyword keyWord();
+    std::string keyWord();
     std::string symbol();
     std::string identifier();
     int intVal();
     std::string stringVal();
+    void error(std::string text);
 
 private:
     std::vector<char> symbols;
     std::vector<std::string> contents;
-    std::map<std::string, Keyword> keywords;
+    std::vector<std::string> keywords;
     std::map<char, std::string> symbolsMap;
     bool symbolCheck(char c);
     bool stringCheck(std::string str);
