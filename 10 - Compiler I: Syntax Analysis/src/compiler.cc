@@ -1,5 +1,7 @@
 #include "compiler.hpp"
 #include "tokenizer.hpp"
+#include "helpers.hpp"
+#include <iostream>
 #include <fstream>
 #include <stdexcept>
 
@@ -15,10 +17,13 @@ Compiler::Compiler(std::string filename, std::string output)
 
 void Compiler::compileClass()
 {
+    tokenizer.advance();
     if (tokenizer.tokenType() != KEYWORD || tokenizer.keyWord() != CLASS)
     {
         std::runtime_error("File should start with a class");
     }
+    ofs << "test" << std::endl;
+    tokenizer.advance();
 }
 
 void Compiler::compileClassVarDec()

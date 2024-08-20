@@ -58,7 +58,6 @@ void Tokenizer::advance()
 
 Token Tokenizer::tokenType()
 {
-    std::cout << "test:" << contents[index] << " " << line_index << std::endl;
     if (isdigit(contents[index][line_index]))
     {
         for (unsigned int i = line_index; i < contents[index].size(); i++)

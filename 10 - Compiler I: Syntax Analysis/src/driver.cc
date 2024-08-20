@@ -29,11 +29,14 @@ int main(int argc, char *argv[])
             {
                 fs::path newFilePath = inputPath.parent_path() / (inputPath.stem().string() + ".xml");
                 compilationEngine = Compiler(entry.path(), newFilePath);
+                compilationEngine.compileClass();
             }
         }
     }
     else
     {
-        Helper::processFile(inputPath);
+        fs::path newFilePath = inputPath.parent_path() / (inputPath.stem().string() + ".xml");
+        compilationEngine = Compiler(inputPath, newFilePath);
+        compilationEngine.compileClass();
     }
 }
